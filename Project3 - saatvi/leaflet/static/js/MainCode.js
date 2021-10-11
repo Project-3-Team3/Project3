@@ -55,7 +55,6 @@ function makeMap(data) {
             let lats = parseFloat(location.latitude);
             if (lats) {
                 var CustomColour = "#3274A3";
-                var iconColour = ""
                 if (data[i].suspect_deceased_injured_or_shoot_and_miss == "Shoot and Miss")
                     customColour = "#31882A";
 
