@@ -46,6 +46,17 @@
 					</nav>
 				</header>
 
+							<!-- Main -->
+							<div id="main" class="wrapper style1">
+								<div class="container">
+									<header class="major">
+										<h2>Sunburst Graph</h2>
+										<p>A sunburst chart consists of an inner circle surrounded by rings of deeper hierarchy levels. The angle of each segment proportional to either a value or divided equally under its inner segment. T</p>
+									</header>
+									<div class="row gtr-150">
+										<div class="col-8 col-12-medium">
+
+
 				<!DOCTYPE html>
 				<head>
 					<meta charset="utf-8">
@@ -59,7 +70,7 @@
 				
 				<body>
 					
-					<svg id="partitionSVG" width=960 height=960 viewBox="0 0 auto 960"></svg>
+					<svg id="partitionSVG" width=800 height=800 viewBox="0 0 auto 800"></svg>
 					<script>
 						const format = d3.format(",d");
 						const width = 960;
@@ -69,7 +80,7 @@
 								.startAngle(d => d.x0)
 								.endAngle(d => d.x1)
 								.padAngle(d => Math.min((d.x1 - d.x0) / 2, 0.005))
-								.padRadius(radius * 1.5)
+								.padRadius(radius * 1.0)
 								.innerRadius(d => d.y0 * radius)
 								.outerRadius(d => Math.max(d.y0 * radius, d.y1 * radius - 1));
 				
@@ -92,8 +103,8 @@
 							root.each(d => d.current = d);
 				
 							const svg = d3.select('#partitionSVG')
-									.style("width", "100%")
-									.style("height", "auto")
+									.style("width", "125%")
+									.style("height", "125%")
 									.style("font", "10px sans-serif");
 				
 							const g = svg.append("g")
