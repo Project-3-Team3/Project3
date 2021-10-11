@@ -6,7 +6,7 @@
 -->
 <html>
 	<head>
-		<title>Right Sidebar - Landed by HTML5 UP</title>
+		<title>Lollipop Plotly</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="assets/css/main.css" />
@@ -50,23 +50,32 @@
 				<div id="main" class="wrapper style1">
 					<div class="container">
 						<header class="major">
-							<h2>Lollipop Plot</h2>
-							<p>A lollipop plot is basically a barplot, where the bar is transformed in a line and a dot.
-								It shows the relationship between a numeric and a categorical variable.</p>
+							<h2>Lollipop and Plotly Plots</h2>
+							<p>The lollipop chart displays the number of burglaries or thefts in 2020.
+								Plotly bar chart shows homicicdes committed in 2020.
+								Buttons are available to select the desired category.</p>
 						</header>
-						<div class="row gtr-150">
-							<div class="col-8 col-12-medium">
+					</div>
+				</div>
+						<!-- <div class="row gtr-150">
+							<div class="col-8 col-12-medium"> -->
 
 <!DOCTYPE html>
 <html lang="en">
 
 	<head>
     	<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+		<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 
-    <!-- Load d3.js -->
-    <script src="https://d3js.org/d3.v7.js"></script>
+		<!-- Load d3.js -->
+		<script src="https://d3js.org/d3.v7.js"></script>
+		<script src="data.js"></script>
+		<script src="plots.js"></script>
 
-</head>
+	</head>
 
 <body>
     <!-- Add 2 buttons -->
@@ -76,8 +85,9 @@
     <!-- Create a div where the graph will take place -->
     <div id="my_dataviz"></div>
     <script src="plots3.js"></script>
-
-	dcc.Graph(id='my-graph',style={'width': '90vh', 'height': '90vh'}) 
+	<br>
+	<br>
+	<div id="plot"></div>
 
 </body>
 

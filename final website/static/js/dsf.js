@@ -57,16 +57,16 @@ function makeMap(data) {
                 var CustomColour = "#3274A3";
                 var iconColour = ""
                 if (data[i].suspect_deceased_injured_or_shoot_and_miss == "Shoot and Miss")
-                    customColour = "#31882A";
+                    CustomColour = "#31882A";
 
                 else if (data[i].suspect_deceased_injured_or_shoot_and_miss == "Injured")
-                    customColour = "#988F2E";
+                    CustomColour = "#988F2E";
                 else
-                    customColour = "#982E40";
+                    CustomColour = "#982E40";
 
                 //Create custom icon
                 var customMarker = L.AwesomeMarkers.icon({
-                    markerColor: customColour
+                    markerColor: CustomColour
                 });
 
                 // Format date 
@@ -77,7 +77,7 @@ function makeMap(data) {
                 marker.bindPopup("<h1>" + data[i].suspect_s +
                     "</h1> <hr> <h2>" + "Occured at " + data[i].location + " on " + new_date +
                     "</h2> <hr> <h2>" + data[i].suspect_deceased_injured_or_shoot_and_miss +
-                    "</h2> <hr> <h3>" + "Shot by: Officer(s) " + data[i].officer_s) + "</h3>";
+                    "</h2> <hr> <h3>" + "Shot by: Officer(s) " + data[i].officer_s + "</h3>");
                 shootingMarkers.addLayer(marker);
 
                 // add heat map data
