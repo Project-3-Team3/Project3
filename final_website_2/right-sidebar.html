@@ -1,0 +1,101 @@
+<!DOCTYPE HTML>
+<!--
+	Landed by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+
+<head>
+    <title>Lollipop Plotly</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="assets/css/main.css" />
+    <noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://unpkg.com/d3-v6-tip@1.0.6/build/d3-v6-tip.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+    <!-- Load d3.js -->
+    <script src="https://d3js.org/d3.v7.js"></script>
+    <script src="data.js"></script>
+    <script src="plots.js"></script>
+
+    <style>
+        .tooltip {
+            position: absolute;
+            width: 135px;
+            height: 135px;
+            padding: 2px;
+            padding-top: 8px;
+            font: 12px sans-serif;
+            color: white;
+            text-align: center;
+            background: red;
+            border: 0;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+
+<body class="is-preload">
+    <div id="page-wrapper">
+
+        <!-- Header -->
+        <header id="header">
+            <!-- <h1 id="logo"><a href="index.html">Landed</a></h1> -->
+            <nav id="nav">
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li>
+                        <a href="#">Visuals</a>
+                        <ul>
+                            <li><a href="left-sidebar.html">Sunburst Graph</a></li>
+                            <li><a href="right-sidebar.html">Lollipop Plot</a></li>
+                            <li><a href="no-sidebar.html">Leaflet Map</a></li>
+                            <!-- <li>
+										<a href="#">Submenu</a> -->
+                            <!-- <ul>
+											<li><a href="#">Option 1</a></li>
+											<li><a href="#">Option 2</a></li>
+											<li><a href="#">Option 3</a></li>
+											<li><a href="#">Option 4</a></li>
+										</ul>
+									</li>
+								</ul> -->
+                    </li>
+                    <li><a href="data.html">Data</a></li>
+                    </li>
+                    <li><a href="team.html">Team</a></li>
+                    <!-- <li><a href="#" class="button primary">Sign Up</a></li> -->
+                    </ul>
+            </nav>
+        </header>
+
+        <!-- Main -->
+        <div id="main" class="wrapper style1">
+            <div class="container">
+                <header class="major">
+                    <h2>Lollipop and Plotly Plots</h2>
+                    <p>The lollipop chart displays the number of burglaries or thefts in 2020. Plotly bar chart shows homicicdes committed in 2020. Buttons are available to select the desired category.</p>
+                </header>
+            </div>
+        </div>
+
+
+        <!-- Create a div where the graph will take place -->
+        <div id="my_dataviz" style="text-align: center;">
+            <h1>Burglaries and Theft in 2020</h1>
+            <!-- Add 2 buttons -->
+            <button onclick="update('Burglary')">Burglaries</button>
+            <button onclick="update('Theft')">Theft</button>
+        </div>
+        <script src="plots3.js"></script>
+        <br>
+        <br>
+        <div id="plot"></div>
+
+</body>
+
+</html>

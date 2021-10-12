@@ -1,0 +1,182 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <title>Left Sidebar - Landed by HTML5 UP</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="assets/css/main.css" />
+    <noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@observablehq/stdlib"></script>
+</head>
+
+<body class="is-preload">
+    <div id="page-wrapper">
+
+        <!-- Header -->
+        <header id="header">
+            <!-- <h1 id="logo"><a href="index.html">Landed</a></h1> -->
+            <nav id="nav">
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li>
+                        <a href="#">Visuals</a>
+                        <ul>
+                            <li><a href="/left-sidebar.html">Sunburst Graph</a></li>
+                            <li><a href="/right-sidebar.html">Lollipop Plot</a></li>
+                            <li><a href="/no-sidebar.html">Visual 3</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="data.html">Data</a></li>
+                    <li><a href="team.html">Team</a></li>
+                </ul>
+            </nav>
+        </header>
+    </div>
+
+    <!-- Main -->
+    <div id="main" class="wrapper style1">
+        <div class="container">
+            <header class="major">
+                <h2>Sunburst Graph</h2>
+                <p>On the 2020 police arrest report, it was reported that out of the 94,678 arrests that were made 76,638 were male and 17,948 were female and 92 of them were unknown. It was also found that out the arrests made the age group 20-29 is arrested
+                    the most their total number being 32,988 and the age group that was arrested the least was the group of 90-99 which only had 5 arrests made, although in sunburst graph we see the age groups 60-69 being the lowest, with a count of 3444.
+                    When it came to race the breakdown was: Black 41244, Hispanic or Latino following with 28962 arrests with Native Hawaiian/Pacific Islander 102 and Unknown 44 being the lowest. Lastly when it came to ethnicty most of the arrests were
+                    made with those Non-Hispanic or Latino 82184 and the least under Unknown 267.</p>
+            </header>
+
+
+
+            <svg id="partitionSVG" width=800 height=800 viewBox="0 0 auto 800"></svg>
+
+        </div>
+    </div>
+
+    <script>
+        const format = d3.format(",d");
+        const width = 960;
+        const radius = width / 6;
+
+        const arc = d3.arc()
+            .startAngle(d => d.x0)
+            .endAngle(d => d.x1)
+            .padAngle(d => Math.min((d.x1 - d.x0) / 2, 0.005))
+            .padRadius(radius * 1.0)
+            .innerRadius(d => d.y0 * radius)
+            .outerRadius(d => Math.max(d.y0 * radius, d.y1 * radius - 1));
+
+        const partition = data => {
+            const root = d3.hierarchy(data)
+                .sum(d => d.value)
+                .sort((a, b) => b.value - a.value);
+            return d3.partition()
+                .size([2 * Math.PI, root.height + 1])
+                (root);
+        }
+
+        //  
+        d3.json("flarejsonall.json").then(data => {
+
+            console.log(data);
+            const root = partition(data);
+            const color = d3.scaleOrdinal().range(d3.quantize(d3.interpolateRainbow, data.children.length + 1));
+
+            root.each(d => d.current = d);
+
+            const svg = d3.select('#partitionSVG')
+                .style("width", "125%")
+                .style("height", "125%")
+                .style("font", "10px sans-serif");
+
+            const g = svg.append("g")
+                .attr("transform", `translate(${width / 2},${width / 2})`);
+
+            const path = g.append("g")
+                .selectAll("path")
+                .data(root.descendants().slice(1))
+                .join("path")
+                .attr("fill", d => {
+                    while (d.depth > 1)
+                        d = d.parent;
+                    return color(d.data.name);
+                })
+                .attr("fill-opacity", d => arcVisible(d.current) ? (d.children ? 0.6 : 0.4) : 0)
+                .attr("d", d => arc(d.current));
+
+            path.filter(d => d.children)
+                .style("cursor", "pointer")
+                .on("click", clicked);
+
+            path.append("title")
+                .text(d => `${d.ancestors().map(d => d.data.name).reverse().join("/")}\n${format(d.value)}`);
+
+            const label = g.append("g")
+                .attr("pointer-events", "none")
+                .attr("text-anchor", "middle")
+                .style("user-select", "none")
+                .selectAll("text")
+                .data(root.descendants().slice(1))
+                .join("text")
+                .attr("dy", "0.35em")
+                .attr("fill-opacity", d => +labelVisible(d.current))
+                .attr("transform", d => labelTransform(d.current))
+                .text(d => d.data.name);
+
+            const parent = g.append("circle")
+                .datum(root)
+                .attr("r", radius)
+                .attr("fill", "none")
+                .attr("pointer-events", "all")
+                .on("click", clicked);
+
+            function clicked(p) {
+                parent.datum(p.parent || root);
+
+                root.each(d => d.target = {
+                    x0: Math.max(0, Math.min(1, (d.x0 - p.x0) / (p.x1 - p.x0))) * 2 * Math.PI,
+                    x1: Math.max(0, Math.min(1, (d.x1 - p.x0) / (p.x1 - p.x0))) * 2 * Math.PI,
+                    y0: Math.max(0, d.y0 - p.depth),
+                    y1: Math.max(0, d.y1 - p.depth)
+                });
+
+                const t = g.transition().duration(750);
+
+                // Transition the data on all arcs, even the ones that aren’t visible,
+                // so that if this transition is interrupted, entering arcs will start
+                // the next transition from the desired position.
+                path.transition(t)
+                    .tween("data", d => {
+                        const i = d3.interpolate(d.current, d.target);
+                        return t => d.current = i(t);
+                    })
+                    .filter(function(d) {
+                        return +this.getAttribute("fill-opacity") || arcVisible(d.target);
+                    })
+                    .attr("fill-opacity", d => arcVisible(d.target) ? (d.children ? 0.6 : 0.4) : 0)
+                    .attrTween("d", d => () => arc(d.current));
+
+                label.filter(function(d) {
+                        return +this.getAttribute("fill-opacity") || labelVisible(d.target);
+                    }).transition(t)
+                    .attr("fill-opacity", d => +labelVisible(d.target))
+                    .attrTween("transform", d => () => labelTransform(d.current));
+            }
+
+            function arcVisible(d) {
+                return d.y1 <= 3 && d.y0 >= 1 && d.x1 > d.x0;
+            }
+
+            function labelVisible(d) {
+                return d.y1 <= 3 && d.y0 >= 1 && (d.y1 - d.y0) * (d.x1 - d.x0) > 0.03;
+            }
+
+            function labelTransform(d) {
+                const x = (d.x0 + d.x1) / 2 * 180 / Math.PI;
+                const y = (d.y0 + d.y1) / 2 * radius;
+                return `rotate(${x - 90}) translate(${y},0) rotate(${x < 180 ? 0 : 180})`;
+            }
+        });
+    </script>
+</body>
